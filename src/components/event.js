@@ -1,7 +1,7 @@
 const createTripsEventTemplate = (event) => {
 
   const castTimeFormat = (value) => {
-    return value < 10 ? `0${value}` : String(value);
+    return String(value).padStart(2, `0`);
   };
 
   const formatTime = (date) => {
