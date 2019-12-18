@@ -4,7 +4,7 @@ const castTimeFormat = (value) => {
   return value < 10 ? `0${value}` : String(value);
 };
 
-const dateFotmat = (date) => {
+const dateFormat = (date) => {
   const year = date.getFullYear();
   const month = date.getMonth();
   const day = date. getDay();
@@ -103,12 +103,12 @@ const createAddFormTemplate = () => {
           <label class="visually-hidden" for="event-start-time-1">
             From
           </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFotmat(new Date())}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(new Date())}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">
             To
           </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFotmat(new Date())}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(new Date())}">
         </div>
     
         <div class="event__field-group  event__field-group--price">
@@ -127,10 +127,9 @@ const createAddFormTemplate = () => {
 };
 
 const createFormTemplate = (event) => {
-  let offerList = [];
-  for (let offer of event.offers) {
-    offerList.push(offer.type);
-  }
+  let offerList = event.offers.map((offer) => {
+    return offer.type;
+  });
   offerList = new Set(offerList);
 
   const createOffersTemplate = () => {
@@ -249,12 +248,12 @@ const createFormTemplate = (event) => {
           <label class="visually-hidden" for="event-start-time-1">
             From
           </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFotmat(event.dateStart)}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFormat(event.dateStart)}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">
             To
           </label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFotmat(event.dateEnd)}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateFormat(event.dateEnd)}">
         </div>
     
         <div class="event__field-group  event__field-group--price">

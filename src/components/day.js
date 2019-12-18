@@ -6,12 +6,10 @@ const createTripsDayTemplate = (dayNumber, eventDate) => {
     day: `numeric`
   };
   const toYYYYMMDDFormat = (dayDate) => {
-    let date = new Date(dayDate);
-    return date.toISOString().slice(0, 10);
+    return dayDate.toISOString().slice(0, 10);
   };
   const toMMMDDFormat = (dayDate) => {
-    let date = new Date(dayDate);
-    return date.toLocaleString(`en-US`, dateOption);
+    return dayDate.toLocaleString(`en-US`, dateOption);
   };
 
   return (

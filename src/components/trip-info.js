@@ -1,11 +1,10 @@
 const createTripInfoTemplate = (events) => {
-  const craeteCitiesString = () => {
-    let citiesString = ``;
-    for (let [index, event] of events.entries()) {
-      citiesString += `${index > 0 ? ` &mdash; ` : ``}${event.name}`;
-    }
+  const createCitiesString = () => {
+    const cities = events.map((event) => {
+      return event.name;
+    });
 
-    return citiesString;
+    return cities.join(` &mdash; `);
   };
 
   const createDateString = (dateStart, dateEnd) => {
@@ -16,7 +15,7 @@ const createTripInfoTemplate = (events) => {
 
   return (
     `<div class="trip-info__main">
-      <h1 class="trip-info__title">${craeteCitiesString()}</h1>
+      <h1 class="trip-info__title">${createCitiesString()}</h1>
 
       <p class="trip-info__dates">${createDateString(events[0].dateStart, events[events.length - 1].dateEnd)}</p>
     </div>
