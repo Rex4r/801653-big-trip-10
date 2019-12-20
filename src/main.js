@@ -48,7 +48,6 @@ render(tripEventsElement, tripDays.getElement());
 
 const tripDaysElement = tripEventsElement.querySelector(`.trip-days`);
 let currentDate;
-let currentEvent = 0;
 let dayNumber = 0;
 for (let event of trip) {
   if (currentDate !== event.dateStart) {
@@ -57,14 +56,19 @@ for (let event of trip) {
     render(tripDaysElement, tripDay.getElement());
     currentDate = event.dateStart;
   }
-  if (currentEvent === 0) {
-    const tripDayEventsElement = tripEventsElement.querySelector(`.trip-events__list`);
-    const eventForm = new EventForm(event);
-    render(tripDayEventsElement, eventForm.getElement());
-  } else {
-    const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
-    const tripEvent = new TripEvent(event);
-    render(tripDayEventsElement, tripEvent.getElement());
-  }
-  currentEvent++;
+  const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
+  const tripEvent = new TripEvent(event);
+  const eventForm = new EventForm(event);
+
+  const eventButton = tripEvent.getElement().querySelector(`.event__rollup-btn`);
+  eventButton.addEventListener(`click`, () => {
+    tripDayEventsElement.replaceChild(eventForm.getElement(), tripEvent.getElement());
+  });
+
+  const eventFormElement = eventForm.getElement();
+  eventFormElement.addEventListener(`submit`, () => {
+    tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
+  });
+
+  render(tripDayEventsElement, tripEvent.getElement());
 }
