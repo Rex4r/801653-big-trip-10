@@ -1,4 +1,4 @@
-import {createTripsEventTemplate} from "./event.js";
+import {createElement} from "../utils";
 
 const createTripsDayTemplate = (dayNumber, eventDate) => {
   const dateOption = {
@@ -18,10 +18,32 @@ const createTripsDayTemplate = (dayNumber, eventDate) => {
         <span class="day__counter">${dayNumber}</span>
         <time class="day__date" datetime="${toYYYYMMDDFormat(eventDate)}">${toMMMDDFormat(eventDate)}</time>
       </div>
-    
+
       <ul class="trip-events__list"></ul>
     </li>`
   );
 };
 
-export {createTripsDayTemplate, createTripsEventTemplate};
+export default class TripDay {
+  constructor(dayNumber, eventDate) {
+    this._dayNumber = dayNumber;
+    this._eventDate = eventDate;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripsDayTemplate(this._dayNumber, this._eventDate);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

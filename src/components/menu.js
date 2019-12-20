@@ -1,3 +1,5 @@
+import {createElement} from '../utils.js';
+
 const menuNames = [
   `Table`, `Stats`
 ];
@@ -16,4 +18,24 @@ const createMenuTemplate = () => {
   );
 };
 
-export {createMenuTemplate};
+export default class Menu {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

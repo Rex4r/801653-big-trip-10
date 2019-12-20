@@ -1,3 +1,5 @@
+import {createElement} from "../utils";
+
 const createTripsEventTemplate = (event) => {
 
   const castTimeFormat = (value) => {
@@ -57,7 +59,7 @@ const createTripsEventTemplate = (event) => {
           <img class="event__type-icon" width="42" height="42" src="img/icons/${event.type.replace(` `, `-`)}.png" alt="Event type icon">
         </div>
         <h3 class="event__title">${event.type} at ${event.name}</h3>
-    
+
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${event.dateStart.toISOString()}">${formatTime(event.dateStart)}</time>
@@ -66,14 +68,14 @@ const createTripsEventTemplate = (event) => {
           </p>
           <p class="event__duration">${getDurationString(event.duration)}</p>
         </div>
-    
+
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${event.price}</span>
         </p>
-    
+
         <h4 class="visually-hidden">Offers:</h4>
         ${createOffersTemplate(event.offers)}
-    
+
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
@@ -82,4 +84,25 @@ const createTripsEventTemplate = (event) => {
   );
 };
 
-export {createTripsEventTemplate};
+export default class TripEvent {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripsEventTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

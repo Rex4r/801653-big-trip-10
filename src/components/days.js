@@ -1,5 +1,4 @@
-import {createAddFormTemplate, createFormTemplate} from "./form.js";
-import {createTripsDayTemplate, createTripsEventTemplate} from "./day.js";
+import {createElement} from "../utils";
 
 const createTripsDaysTemplate = () => {
   return (
@@ -7,4 +6,24 @@ const createTripsDaysTemplate = () => {
   );
 };
 
-export {createAddFormTemplate, createFormTemplate, createTripsDaysTemplate, createTripsDayTemplate, createTripsEventTemplate};
+export default class TripDays {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripsDaysTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
