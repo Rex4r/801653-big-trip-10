@@ -5,4 +5,8 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-export {createElement};
+const castTimeFormat = (value) => {
+  return String(value).padStart(2, `0`);
+};
+
+export {createElement, castTimeFormat};
