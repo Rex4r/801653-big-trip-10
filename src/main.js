@@ -1,10 +1,15 @@
-import {createTripInfoTemplate, createMenuTemplate, createFiltersTemplate} from "./components/header.js";
-import {createSortTemplate} from "./components/sort.js";
-import {createAddFormTemplate, createFormTemplate, createTripsDaysTemplate, createTripsDayTemplate, createTripsEventTemplate} from "./components/days.js";
+import TripInfo from "./components/trip-info.js";
+import Menu from "./components/menu.js";
+import Filters from "./components/filter.js";
+import Sort from "./components/sort.js";
+import TripDays from "./components/days.js";
+import TripDay from "./components/day.js";
+import TripEvent from "./components/event.js";
+import EventForm from "./components/form.js";
 import {generateTrip} from "./mock/trip.js";
 
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
+const render = (container, element, place = `beforeend`) => {
+  container.insertAdjacentElement(place, element);
 };
 
 let trip = generateTrip();
@@ -12,8 +17,9 @@ let trip = generateTrip();
 const bodyElement = document.querySelector(`.page-body`);
 const headerElement = bodyElement.querySelector(`.page-header`);
 
+const tripInfo = new TripInfo(trip);
 const tripInfoElement = headerElement.querySelector(`.trip-info`);
-render(tripInfoElement, createTripInfoTemplate(trip), `afterbegin`);
+render(tripInfoElement, tripInfo.getElement(), `afterbegin`);
 
 let tripCost = 0;
 for (let event of trip) {
@@ -21,36 +27,48 @@ for (let event of trip) {
 }
 tripInfoElement.querySelector(`.trip-info__cost-value`).innerText = tripCost;
 
+const menu = new Menu();
 const tripControlsElement = headerElement.querySelector(`.trip-controls`);
 const tripControlsMenuTitleElement = tripControlsElement.querySelector(`.visually-hidden`);
-render(tripControlsMenuTitleElement, createMenuTemplate(), `afterend`);
+render(tripControlsMenuTitleElement, menu.getElement(), `afterend`);
 
+const filters = new Filters();
 const tripControlsFilterTitleElement = tripControlsElement.querySelector(`.visually-hidden:last-child`);
-render(tripControlsFilterTitleElement, createFiltersTemplate(), `afterend`);
+render(tripControlsFilterTitleElement, filters.getElement(), `afterend`);
 
 const mainElement = bodyElement.querySelector(`.page-main`);
 
+const sort = new Sort();
+const form = new EventForm();
+const tripDays = new TripDays();
 const tripEventsElement = mainElement.querySelector(`.trip-events`);
-render(tripEventsElement, createSortTemplate());
-render(tripEventsElement, createAddFormTemplate());
-render(tripEventsElement, createTripsDaysTemplate());
+render(tripEventsElement, sort.getElement());
+render(tripEventsElement, form.getElement());
+render(tripEventsElement, tripDays.getElement());
 
 const tripDaysElement = tripEventsElement.querySelector(`.trip-days`);
 let currentDate;
-let currentEvent = 0;
 let dayNumber = 0;
 for (let event of trip) {
   if (currentDate !== event.dateStart) {
     dayNumber++;
-    render(tripDaysElement, createTripsDayTemplate(dayNumber, event.dateStart));
+    const tripDay = new TripDay(dayNumber, event.dateStart);
+    render(tripDaysElement, tripDay.getElement());
     currentDate = event.dateStart;
   }
-  if (currentEvent === 0) {
-    const tripDayEventsElement = tripEventsElement.querySelector(`.trip-events__list`);
-    render(tripDayEventsElement, createFormTemplate(event));
-  } else {
-    const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
-    render(tripDayEventsElement, createTripsEventTemplate(event));
-  }
-  currentEvent++;
+  const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
+  const tripEvent = new TripEvent(event);
+  const eventForm = new EventForm(event);
+
+  const eventButton = tripEvent.getElement().querySelector(`.event__rollup-btn`);
+  eventButton.addEventListener(`click`, () => {
+    tripDayEventsElement.replaceChild(eventForm.getElement(), tripEvent.getElement());
+  });
+
+  const eventFormElement = eventForm.getElement();
+  eventFormElement.addEventListener(`submit`, () => {
+    tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
+  });
+
+  render(tripDayEventsElement, tripEvent.getElement());
 }
