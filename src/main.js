@@ -60,14 +60,26 @@ for (let event of trip) {
   const tripEvent = new TripEvent(event);
   const eventForm = new EventForm(event);
 
+  const replaceFormToPoint = () => {
+    tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
+  };
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+    if (isEscKey) {
+      replaceFormToPoint();
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
   const eventButton = tripEvent.getElement().querySelector(`.event__rollup-btn`);
   eventButton.addEventListener(`click`, () => {
     tripDayEventsElement.replaceChild(eventForm.getElement(), tripEvent.getElement());
+    document.addEventListener(`keydown`, onEscKeyDown);
   });
 
   const eventFormElement = eventForm.getElement();
   eventFormElement.addEventListener(`submit`, () => {
-    tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
+    replaceFormToPoint();
   });
 
   render(tripDayEventsElement, tripEvent.getElement());
