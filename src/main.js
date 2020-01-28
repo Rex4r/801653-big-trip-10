@@ -17,15 +17,17 @@ let trip = generateTrip();
 const bodyElement = document.querySelector(`.page-body`);
 const headerElement = bodyElement.querySelector(`.page-header`);
 
-const tripInfo = new TripInfo(trip);
-const tripInfoElement = headerElement.querySelector(`.trip-info`);
-render(tripInfoElement, tripInfo.getElement(), `afterbegin`);
+if (trip.length > 0) {
+  const tripInfo = new TripInfo(trip);
+  const tripInfoElement = headerElement.querySelector(`.trip-info`);
+  render(tripInfoElement, tripInfo.getElement(), `afterbegin`);
 
-let tripCost = 0;
-for (let event of trip) {
-  tripCost += event.price;
+  let tripCost = 0;
+  for (let event of trip) {
+    tripCost += event.price;
+  }
+  tripInfoElement.querySelector(`.trip-info__cost-value`).innerText = tripCost;
 }
-tripInfoElement.querySelector(`.trip-info__cost-value`).innerText = tripCost;
 
 const menu = new Menu();
 const tripControlsElement = headerElement.querySelector(`.trip-controls`);
@@ -42,45 +44,50 @@ const sort = new Sort();
 const form = new EventForm();
 const tripDays = new TripDays();
 const tripEventsElement = mainElement.querySelector(`.trip-events`);
-render(tripEventsElement, sort.getElement());
-render(tripEventsElement, form.getElement());
-render(tripEventsElement, tripDays.getElement());
 
-const tripDaysElement = tripEventsElement.querySelector(`.trip-days`);
-let currentDate;
-let dayNumber = 0;
-for (let event of trip) {
-  if (currentDate !== event.dateStart) {
-    dayNumber++;
-    const tripDay = new TripDay(dayNumber, event.dateStart);
-    render(tripDaysElement, tripDay.getElement());
-    currentDate = event.dateStart;
-  }
-  const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
-  const tripEvent = new TripEvent(event);
-  const eventForm = new EventForm(event);
+if (trip.length === 0) {
+  tripEventsElement.insertAdjacentHTML(`beforeend`, `<p class="trip-events__msg">Click New Event to create your first point</p>`);
+} else {
+  render(tripEventsElement, form.getElement());
+  render(tripEventsElement, sort.getElement());
+  render(tripEventsElement, tripDays.getElement());
 
-  const replaceFormToPoint = () => {
-    tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
-  };
-  const onEscKeyDown = (evt) => {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-    if (isEscKey) {
-      replaceFormToPoint();
-      document.removeEventListener(`keydown`, onEscKeyDown);
+  const tripDaysElement = tripEventsElement.querySelector(`.trip-days`);
+  let currentDate;
+  let dayNumber = 0;
+  for (let event of trip) {
+    if (currentDate !== event.dateStart) {
+      dayNumber++;
+      const tripDay = new TripDay(dayNumber, event.dateStart);
+      render(tripDaysElement, tripDay.getElement());
+      currentDate = event.dateStart;
     }
-  };
+    const tripDayEventsElement = tripDaysElement.querySelector(`.trip-days__item:nth-child(${dayNumber}) .trip-events__list`);
+    const tripEvent = new TripEvent(event);
+    const eventForm = new EventForm(event);
 
-  const eventButton = tripEvent.getElement().querySelector(`.event__rollup-btn`);
-  eventButton.addEventListener(`click`, () => {
-    tripDayEventsElement.replaceChild(eventForm.getElement(), tripEvent.getElement());
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
+    const replaceFormToPoint = () => {
+      tripDayEventsElement.replaceChild(tripEvent.getElement(), eventForm.getElement());
+    };
+    const onEscKeyDown = (evt) => {
+      const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+      if (isEscKey) {
+        replaceFormToPoint();
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      }
+    };
 
-  const eventFormElement = eventForm.getElement();
-  eventFormElement.addEventListener(`submit`, () => {
-    replaceFormToPoint();
-  });
+    const eventButton = tripEvent.getElement().querySelector(`.event__rollup-btn`);
+    eventButton.addEventListener(`click`, () => {
+      tripDayEventsElement.replaceChild(eventForm.getElement(), tripEvent.getElement());
+      document.addEventListener(`keydown`, onEscKeyDown);
+    });
 
-  render(tripDayEventsElement, tripEvent.getElement());
+    const eventFormElement = eventForm.getElement();
+    eventFormElement.addEventListener(`submit`, () => {
+      replaceFormToPoint();
+    });
+
+    render(tripDayEventsElement, tripEvent.getElement());
+  }
 }

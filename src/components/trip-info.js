@@ -17,7 +17,7 @@ export default class TripInfo {
 
     const createDateString = (dateStart, dateEnd) => {
       return (
-        `${dateStart.getMonth()} ${dateStart.getDate()}&nbsp;&mdash;&nbsp;${dateStart.getMonth() !== dateEnd.getMonth() ? dateEnd.getMonth() : ``} ${dateEnd.getDate()}`
+        `${dateStart.toLocaleString(`en-US`, {month: `short`})} ${dateStart.getDate()}&nbsp;&mdash;&nbsp;${dateStart.getMonth() !== dateEnd.getMonth() ? dateEnd.toLocaleString(`en-US`, {month: `short`}) : ``} ${dateEnd.getDate()}`
       );
     };
 
