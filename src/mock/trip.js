@@ -1,4 +1,4 @@
-import {eventOffers} from "../const";
+import {eventOffers} from "../utils/const";
 
 const eventType = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check in`, `Sightseeing`, `Restaurant`];
 const eventName = [`Amsterdam`, `Geneva`, `Chamonix`, `Saint Petersburg`];

@@ -1,5 +1,5 @@
-import {eventOffers} from "../const";
-import {castTimeFormat} from "../utils";
+import {eventOffers} from "../utils/const";
+import {castTimeFormat} from "../utils/common";
 import AbstractComponent from './abstract-component.js';
 
 export default class EventForm extends AbstractComponent {
@@ -290,5 +290,13 @@ export default class EventForm extends AbstractComponent {
         </form>`
       );
     }
+  }
+
+  setFormSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
+  }
+
+  setCancelButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, handler);
   }
 }
