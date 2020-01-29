@@ -1,13 +1,8 @@
 import TripInfo from "./components/trip-info.js";
 import Menu from "./components/menu.js";
 import Filters from "./components/filter.js";
-import Sort from "./components/sort.js";
-import TripDays from "./components/days.js";
-import TripDay from "./components/day.js";
-import TripEvent from "./components/event.js";
-import EventForm from "./components/form.js";
 import {generateTrip} from "./mock/trip.js";
-import {render, replace} from "./utils/render.js";
+import {render} from "./utils/render.js";
 import TripController from "./controllers/trip";
 
 let trip = generateTrip();
