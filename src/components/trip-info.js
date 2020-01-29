@@ -1,9 +1,9 @@
-import {createElement} from "../utils";
+import AbstractComponent from './abstract-component.js';
 
-export default class TripInfo {
+export default class TripInfo extends AbstractComponent {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
@@ -28,17 +28,5 @@ export default class TripInfo {
         <p class="trip-info__dates">${createDateString(this._events[0].dateStart, this._events[this._events.length - 1].dateEnd)}</p>
       </div>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

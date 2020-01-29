@@ -1,9 +1,10 @@
-import {createElement, castTimeFormat} from "../utils";
+import {castTimeFormat} from "../utils";
+import AbstractComponent from './abstract-component.js';
 
-export default class TripEvent {
+export default class TripEvent extends AbstractComponent {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
@@ -83,17 +84,5 @@ export default class TripEvent {
       </div>
     </li>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

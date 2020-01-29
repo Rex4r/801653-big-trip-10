@@ -1,10 +1,11 @@
 import {eventOffers} from "../const";
-import {createElement, castTimeFormat} from "../utils";
+import {castTimeFormat} from "../utils";
+import AbstractComponent from './abstract-component.js';
 
-export default class EventForm {
+export default class EventForm extends AbstractComponent {
   constructor(event = null) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
@@ -289,17 +290,5 @@ export default class EventForm {
         </form>`
       );
     }
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
