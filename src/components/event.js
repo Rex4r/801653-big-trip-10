@@ -1,9 +1,10 @@
-import {createElement, castTimeFormat} from "../utils";
+import {castTimeFormat} from "../utils/common";
+import AbstractComponent from './abstract-component.js';
 
-export default class TripEvent {
+export default class TripEvent extends AbstractComponent {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
@@ -85,15 +86,7 @@ export default class TripEvent {
     );
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, handler);
   }
 }

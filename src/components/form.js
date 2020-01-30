@@ -1,10 +1,11 @@
-import {eventOffers} from "../const";
-import {createElement, castTimeFormat} from "../utils";
+import {eventOffers} from "../utils/const";
+import {castTimeFormat} from "../utils/common";
+import AbstractComponent from './abstract-component.js';
 
-export default class EventForm {
+export default class EventForm extends AbstractComponent {
   constructor(event = null) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
@@ -291,15 +292,11 @@ export default class EventForm {
     }
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setFormSubmitHandler(handler) {
+    this.getElement().addEventListener(`submit`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setCancelButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, handler);
   }
 }
